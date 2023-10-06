@@ -12,7 +12,9 @@
 		<PackageTags>Skyline;DataMiner</PackageTags>
 		<PackageProjectUrl>https://skyline.be/</PackageProjectUrl>
 		<Description>
+			Certificates package.
 		</Description>
+		<PackageIcon>Icon.png</PackageIcon>
 	</PropertyGroup>
 	<ItemGroup>
 		<None Include="..\_NuGetItems\LICENSE.txt">
