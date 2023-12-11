@@ -88,7 +88,11 @@
 				_issuerCrtPath = Directory.GetFiles(folder).First(x => x.EndsWith(".crt"));
 				_issuerP12Path = Directory.GetFiles(folder).First(x => x.EndsWith(".p12"));
 
-				return _issuerCrtPath;
+				var ca = CertificatesFactory.GetCertificate(_issuerCrtPath, _issuerP12Path);
+				if (UtilityFunctions.CompareDistinguishedNames(issuer, ca.CertificateInfo.DistinguishedName))
+				{
+					return _issuerCrtPath;
+				}				
 			}
 
 			return string.Empty;
