@@ -2,11 +2,8 @@
 
 ## About
 
-Certificates class library that can be used to extract basic details about X509Certificate format certificates. 
+Certificates class library that helps to manage X509Certificates. We expect that every certificate is stored in a folder containing a .crt file and a .p12 file.
 
 ## Usage
 
-The certificate is created by specifying the public key path (.crt file) and the private key path (.p12 file).
-Methods are then available to extract information about the certificate, such as the issuing authority and distinguished name.
-
-Can be used in conjunction with the [certificate manager automation script](https://github.com/SkylineCommunications/SLC-AS-ManageCertificates).
+This library can be used to manage the certificate files that are created through the [certificate manager automation script](https://github.com/SkylineCommunications/SLC-AS-ManageCertificates).
