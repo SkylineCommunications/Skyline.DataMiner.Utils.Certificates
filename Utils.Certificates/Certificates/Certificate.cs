@@ -93,12 +93,10 @@
 
 		public ICertificate GetIssuer(params string[] folderPaths)
 		{
-			var issuer = Issuer.Value;
 			foreach (var folder in folderPaths)
 			{
 				foreach (var subfolder in Directory.GetDirectories(folder))
 				{
-					var folderName = subfolder.Substring(subfolder.LastIndexOf("\\") + 1);
 					var issuerCrtPath = Directory.GetFiles(subfolder).FirstOrDefault(x => x.EndsWith(".crt"));
 					var issuerP12Path = Directory.GetFiles(subfolder).FirstOrDefault(x => x.EndsWith(".p12"));
 					if (string.IsNullOrWhiteSpace(issuerCrtPath) || string.IsNullOrWhiteSpace(issuerP12Path))

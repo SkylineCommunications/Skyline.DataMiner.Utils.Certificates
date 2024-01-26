@@ -6,7 +6,7 @@
 	/// <summary>
 	/// The distinguished name.
 	/// </summary>
-	public class DistinguishedName : IEquatable<DistinguishedName>
+	public sealed class DistinguishedName : IEquatable<DistinguishedName>
 	{
 		private Dictionary<string, string> _lookup;
 
@@ -17,35 +17,6 @@
 		public DistinguishedName(string distinguishedName)
 		{
 			Value = distinguishedName;
-		}
-
-		/// <summary>
-		/// Initialize a new instance of <see cref="DistinguishedName"/>.
-		/// </summary>
-		/// <param name="commonName">The CommonName.</param>
-		/// <param name="localityName">The LocalityName.</param>
-		/// <param name="stateOrProvinceName">The StateOrProvinceName.</param>
-		/// <param name="organizationName">The OrganizationName.</param>
-		/// <param name="organizationalUnitName">The OrganizationalUnitName.</param>
-		/// <param name="countryName">The CountryName.</param>
-		/// <param name="streetAddress">The StreetAddress.</param>
-		public DistinguishedName(string commonName, string organizationName = null, string organizationalUnitName = null, string countryName = null, string localityName = null, string stateOrProvinceName = null, string streetAddress = null)
-		{
-			List<string> parts = new List<string>();
-			if (!string.IsNullOrWhiteSpace(commonName)) { parts.Add(commonName); }
-			if (!string.IsNullOrWhiteSpace(localityName)) { parts.Add(localityName); }
-			if (!string.IsNullOrWhiteSpace(stateOrProvinceName)) { parts.Add(stateOrProvinceName); }
-			if (!string.IsNullOrWhiteSpace(organizationName)) { parts.Add(organizationName); }
-			if (!string.IsNullOrWhiteSpace(organizationalUnitName)) { parts.Add(organizationalUnitName); }
-			if (!string.IsNullOrWhiteSpace(countryName)) { parts.Add(countryName); }
-			if (!string.IsNullOrWhiteSpace(streetAddress)) { parts.Add(streetAddress); }
-			string dn = string.Join(",", parts.ToArray());
-			if (string.IsNullOrWhiteSpace(dn))
-			{
-				throw new ArgumentException("At least one field has to be provided");
-			}
-
-			Value = dn;
 		}
 
 		/// <summary>
@@ -203,6 +174,35 @@
 		/// The value of the distinguished name.
 		/// </summary>
 		public string Value { get; private set; }
+
+		/// <summary>
+		/// Initialize a new instance of <see cref="DistinguishedName"/>.
+		/// </summary>
+		/// <param name="commonName">The CommonName.</param>
+		/// <param name="localityName">The LocalityName.</param>
+		/// <param name="stateOrProvinceName">The StateOrProvinceName.</param>
+		/// <param name="organizationName">The OrganizationName.</param>
+		/// <param name="organizationalUnitName">The OrganizationalUnitName.</param>
+		/// <param name="countryName">The CountryName.</param>
+		/// <param name="streetAddress">The StreetAddress.</param>
+		public static DistinguishedName GetDistinguishedName(string commonName, string organizationName = null, string organizationalUnitName = null, string countryName = null, string localityName = null, string stateOrProvinceName = null, string streetAddress = null)
+		{
+			List<string> parts = new List<string>();
+			if (!string.IsNullOrWhiteSpace(commonName)) { parts.Add(commonName); }
+			if (!string.IsNullOrWhiteSpace(localityName)) { parts.Add(localityName); }
+			if (!string.IsNullOrWhiteSpace(stateOrProvinceName)) { parts.Add(stateOrProvinceName); }
+			if (!string.IsNullOrWhiteSpace(organizationName)) { parts.Add(organizationName); }
+			if (!string.IsNullOrWhiteSpace(organizationalUnitName)) { parts.Add(organizationalUnitName); }
+			if (!string.IsNullOrWhiteSpace(countryName)) { parts.Add(countryName); }
+			if (!string.IsNullOrWhiteSpace(streetAddress)) { parts.Add(streetAddress); }
+			string dn = string.Join(",", parts.ToArray());
+			if (string.IsNullOrWhiteSpace(dn))
+			{
+				throw new ArgumentException("At least one field has to be provided");
+			}
+
+			return new DistinguishedName(dn);
+		}
 
 		/// <inheritdoc/>
 		public static bool operator !=(DistinguishedName obj1, DistinguishedName obj2) => !(obj1 == obj2);

@@ -16,6 +16,18 @@
 		</Description>
 		<PackageIcon>Icon.png</PackageIcon>
 	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <WarningLevel>4</WarningLevel>
+	  <NoWarn>NU1803</NoWarn>
+	  <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+	  <WarningsAsErrors />
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <WarningLevel>4</WarningLevel>
+	  <NoWarn>NU1803</NoWarn>
+	  <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+	  <WarningsAsErrors />
+	</PropertyGroup>
 	<ItemGroup>
 		<None Include="..\_NuGetItems\LICENSE.txt">
 			<Pack>True</Pack>
