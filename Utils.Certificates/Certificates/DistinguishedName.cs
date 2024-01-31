@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 
 	/// <summary>
 	/// The distinguished name.
@@ -11,7 +12,7 @@
 		private Dictionary<string, string> _lookup;
 
 		/// <summary>
-		/// Initialize a new instance of <see cref="DistinguishedName"/>.
+		/// Initializes a new instance of the <see cref="DistinguishedName"/> class.
 		/// </summary>
 		/// <param name="distinguishedName">The distinguished name or certificate.</param>
 		public DistinguishedName(string distinguishedName)
@@ -26,14 +27,7 @@
 		{
 			get
 			{
-				if (Lookup.ContainsKey("CN"))
-				{
-					return Lookup["CN"];
-				}
-				else
-				{
-					return string.Empty;
-				}
+				return Lookup.ContainsKey("CN") ? Lookup["CN"] : string.Empty;
 			}
 		}
 
@@ -44,14 +38,7 @@
 		{
 			get
 			{
-				if (Lookup.ContainsKey("C"))
-				{
-					return Lookup["C"];
-				}
-				else
-				{
-					return string.Empty;
-				}
+				return Lookup.ContainsKey("C") ? Lookup["C"] : string.Empty;
 			}
 		}
 
@@ -62,19 +49,12 @@
 		{
 			get
 			{
-				if (Lookup.ContainsKey("L"))
-				{
-					return Lookup["L"];
-				}
-				else
-				{
-					return string.Empty;
-				}
+				return Lookup.ContainsKey("L") ? Lookup["L"] : string.Empty;
 			}
 		}
 
 		/// <summary>
-		/// The lookup dictionary for a DN with ',' or ';' as separator for the different entries and '=' as separator between the attribute name and value.
+		/// Gets the lookup dictionary for a DN with ',' or ';' as separator for the different entries and '=' as separator between the attribute name and value.
 		/// </summary>
 		public Dictionary<string, string> Lookup
 		{
@@ -83,14 +63,11 @@
 				if (_lookup == null)
 				{
 					_lookup = new Dictionary<string, string>();
-					var parts = Value.Split(new[] { ',', ';' });
-					foreach (var part in parts)
+					var parts = Value.Split(',', ';');
+					foreach (var part in parts.Where(p => p.Contains("=")))
 					{
-						if (part.Contains("="))
-						{
-							var valuepair = part.Split(new[] { '=' }, 2);
-							_lookup[valuepair[0]] = valuepair[1];
-						}
+						var valuepair = part.Split(new[] { '=' }, 2);
+						_lookup[valuepair[0]] = valuepair[1];
 					}
 				}
 
@@ -105,14 +82,7 @@
 		{
 			get
 			{
-				if (Lookup.ContainsKey("OU"))
-				{
-					return Lookup["OU"];
-				}
-				else
-				{
-					return string.Empty;
-				}
+				return Lookup.ContainsKey("OU") ? Lookup["OU"] : string.Empty;
 			}
 		}
 
@@ -123,14 +93,7 @@
 		{
 			get
 			{
-				if (Lookup.ContainsKey("O"))
-				{
-					return Lookup["O"];
-				}
-				else
-				{
-					return string.Empty;
-				}
+				return Lookup.ContainsKey("O") ? Lookup["O"] : string.Empty;
 			}
 		}
 
@@ -141,14 +104,7 @@
 		{
 			get
 			{
-				if (Lookup.ContainsKey("ST"))
-				{
-					return Lookup["ST"];
-				}
-				else
-				{
-					return string.Empty;
-				}
+				return Lookup.ContainsKey("ST") ? Lookup["ST"] : string.Empty;
 			}
 		}
 
@@ -159,19 +115,12 @@
 		{
 			get
 			{
-				if (Lookup.ContainsKey("STREET"))
-				{
-					return Lookup["STREET"];
-				}
-				else
-				{
-					return string.Empty;
-				}
+				return Lookup.ContainsKey("STREET") ? Lookup["STREET"] : string.Empty;
 			}
 		}
 
 		/// <summary>
-		/// The value of the distinguished name.
+		/// Gets the value of the distinguished name.
 		/// </summary>
 		public string Value { get; private set; }
 
@@ -179,22 +128,58 @@
 		/// Initialize a new instance of <see cref="DistinguishedName"/>.
 		/// </summary>
 		/// <param name="commonName">The CommonName.</param>
-		/// <param name="localityName">The LocalityName.</param>
-		/// <param name="stateOrProvinceName">The StateOrProvinceName.</param>
 		/// <param name="organizationName">The OrganizationName.</param>
 		/// <param name="organizationalUnitName">The OrganizationalUnitName.</param>
 		/// <param name="countryName">The CountryName.</param>
+		/// <param name="localityName">The LocalityName.</param>
+		/// <param name="stateOrProvinceName">The StateOrProvinceName.</param>
 		/// <param name="streetAddress">The StreetAddress.</param>
-		public static DistinguishedName GetDistinguishedName(string commonName, string organizationName = null, string organizationalUnitName = null, string countryName = null, string localityName = null, string stateOrProvinceName = null, string streetAddress = null)
+		/// <returns>The distinguished name.</returns>
+		public static DistinguishedName GetDistinguishedName(
+			string commonName,
+			string organizationName = null,
+			string organizationalUnitName = null,
+			string countryName = null,
+			string localityName = null,
+			string stateOrProvinceName = null,
+			string streetAddress = null)
 		{
 			List<string> parts = new List<string>();
-			if (!string.IsNullOrWhiteSpace(commonName)) { parts.Add(commonName); }
-			if (!string.IsNullOrWhiteSpace(localityName)) { parts.Add(localityName); }
-			if (!string.IsNullOrWhiteSpace(stateOrProvinceName)) { parts.Add(stateOrProvinceName); }
-			if (!string.IsNullOrWhiteSpace(organizationName)) { parts.Add(organizationName); }
-			if (!string.IsNullOrWhiteSpace(organizationalUnitName)) { parts.Add(organizationalUnitName); }
-			if (!string.IsNullOrWhiteSpace(countryName)) { parts.Add(countryName); }
-			if (!string.IsNullOrWhiteSpace(streetAddress)) { parts.Add(streetAddress); }
+			if (!string.IsNullOrWhiteSpace(commonName))
+			{
+				parts.Add("CN=" + commonName);
+			}
+
+			if (!string.IsNullOrWhiteSpace(localityName))
+			{
+				parts.Add("L=" + localityName);
+			}
+
+			if (!string.IsNullOrWhiteSpace(stateOrProvinceName))
+			{
+				parts.Add("ST=" + stateOrProvinceName);
+			}
+
+			if (!string.IsNullOrWhiteSpace(organizationName))
+			{
+				parts.Add("O=" + organizationName);
+			}
+
+			if (!string.IsNullOrWhiteSpace(organizationalUnitName))
+			{
+				parts.Add("OU=" + organizationalUnitName);
+			}
+
+			if (!string.IsNullOrWhiteSpace(countryName))
+			{
+				parts.Add("C=" + countryName);
+			}
+
+			if (!string.IsNullOrWhiteSpace(streetAddress))
+			{
+				parts.Add("STREET=" + streetAddress);
+			}
+
 			string dn = string.Join(",", parts.ToArray());
 			if (string.IsNullOrWhiteSpace(dn))
 			{
@@ -204,10 +189,8 @@
 			return new DistinguishedName(dn);
 		}
 
-		/// <inheritdoc/>
 		public static bool operator !=(DistinguishedName obj1, DistinguishedName obj2) => !(obj1 == obj2);
 
-		/// <inheritdoc/>
 		public static bool operator ==(DistinguishedName obj1, DistinguishedName obj2)
 		{
 			if (ReferenceEquals(obj1, obj2))
@@ -238,15 +221,8 @@
 				return false;
 			}
 
-			DistinguishedName tObj = obj as DistinguishedName;
-			if (tObj == null)
-			{
-				return false;
-			}
-			else
-			{
-				return Equals(tObj);
-			}
+			DistinguishedName transformedObj = obj as DistinguishedName;
+			return Equals(transformedObj);
 		}
 
 		/// <inheritdoc/>
