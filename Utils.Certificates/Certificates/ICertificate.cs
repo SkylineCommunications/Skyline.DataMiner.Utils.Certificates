@@ -9,32 +9,32 @@
 	public interface ICertificate : IDisposable
 	{
 		/// <summary>
-		/// Defines the certificate object of the certificate.
+		/// Gets the certificate object of the certificate.
 		/// </summary>
 		X509Certificate2 CertificateFile { get; }
 
 		/// <summary>
-		/// Defines the full path of the .crt file of the certificate.
+		/// Gets the full path of the .crt file of the certificate.
 		/// </summary>
 		string CrtPath { get; }
 
 		/// <summary>
-		/// Gets whether or not the certificate is self-signed.
+		/// Gets a value indicating whether the certificate is self-signed.
 		/// </summary>
 		bool IsSelfSigned { get; }
 
 		/// <summary>
-		/// Defines the distinguished name of the issuer of the certificate.
+		/// Gets the distinguished name of the issuer of the certificate.
 		/// </summary>
 		DistinguishedName Issuer { get; }
 
 		/// <summary>
-		/// Defines the full path of the .p12 file of the certificate.
+		/// Gets the full path of the .p12 file of the certificate.
 		/// </summary>
 		string P12Path { get; }
 
 		/// <summary>
-		/// Defines the distinguished name of the certificate.
+		/// Gets the distinguished name of the certificate.
 		/// </summary>
 		DistinguishedName Subject { get; }
 
@@ -43,7 +43,7 @@
 		/// For every folder provided the folder should contain for every certificate a folder that contains .p12 and .crt files.
 		/// </summary>
 		/// <param name="folderPaths">The folder paths to search the issuer.</param>
-		/// <returns>The certificate of the issuer</returns>
-		ICertificate GetIssuer(params string[] folderPaths);
+		/// <returns>The certificate of the issuer.</returns>
+		ICertificate GetIssuersCert(params string[] folderPaths);
 	}
 }

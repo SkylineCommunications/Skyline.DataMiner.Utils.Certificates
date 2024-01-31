@@ -91,7 +91,7 @@
 			}
 		}
 
-		public ICertificate GetIssuer(params string[] folderPaths)
+		public ICertificate GetIssuersCert(params string[] folderPaths)
 		{
 			foreach (var folder in folderPaths)
 			{
