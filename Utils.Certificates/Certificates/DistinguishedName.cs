@@ -67,7 +67,7 @@
 					foreach (var part in parts.Where(p => p.Contains("=")))
 					{
 						var valuepair = part.Split(new[] { '=' }, 2);
-						_lookup[valuepair[0]] = valuepair[1];
+						_lookup[valuepair[0].Trim()] = valuepair[1].Trim();
 					}
 				}
 
@@ -180,7 +180,7 @@
 				parts.Add("STREET=" + streetAddress);
 			}
 
-			string dn = string.Join(",", parts.ToArray());
+			string dn = string.Join(", ", parts.ToArray());
 			if (string.IsNullOrWhiteSpace(dn))
 			{
 				throw new ArgumentException("At least one field has to be provided");
