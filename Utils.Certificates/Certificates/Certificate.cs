@@ -1,10 +1,10 @@
 ﻿namespace Skyline.DataMiner.Utils.Certificates
 {
+	using System;
 	using System.IO;
-	using System.Linq;
 	using System.Security.Cryptography.X509Certificates;
 
-	internal class Certificate : ICertificate
+	internal sealed class Certificate : ICertificate
 	{
 		private readonly string _crtPath;
 		private readonly string _p12Path;
@@ -22,11 +22,7 @@
 		{
 			get
 			{
-				if (_certificate == null)
-				{
-					_certificate = new X509Certificate2(_crtPath);
-				}
-
+				_certificate = _certificate ?? new X509Certificate2(_crtPath);
 				return _certificate;
 			}
 		}
@@ -85,10 +81,7 @@
 
 		public void Dispose()
 		{
-			if (_certificate != null)
-			{
-				_certificate.Dispose();
-			}
+			_certificate?.Dispose();
 		}
 
 		public ICertificate GetIssuersCert(params string[] folderPaths)
@@ -97,8 +90,8 @@
 			{
 				foreach (var subfolder in Directory.GetDirectories(folder))
 				{
-					var issuerCrtPath = Directory.GetFiles(subfolder).FirstOrDefault(x => x.EndsWith(".crt"));
-					var issuerP12Path = Directory.GetFiles(subfolder).FirstOrDefault(x => x.EndsWith(".p12"));
+					var issuerCrtPath = Array.Find(Directory.GetFiles(subfolder), x => x.EndsWith(".crt"));
+					var issuerP12Path = Array.Find(Directory.GetFiles(subfolder), x => x.EndsWith(".p12"));
 					if (string.IsNullOrWhiteSpace(issuerCrtPath) || string.IsNullOrWhiteSpace(issuerP12Path))
 					{
 						continue;
