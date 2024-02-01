@@ -9,40 +9,41 @@
 	public interface ICertificate : IDisposable
 	{
 		/// <summary>
-		/// Defines the full path of the .p12 file of the certificate.
-		/// </summary>
-		string P12Path { get; }
-
-		/// <summary>
-		/// Defines the full path of the .crt file of the certificate.
-		/// </summary>
-		string CrtPath { get; }
-
-		/// <summary>
-		/// Defines the distinguished name of the issuer of the certificate.
-		/// </summary>
-		string Issuer { get; }
-
-		/// <summary>
-		/// Defines the certificate object of the certificate.
+		/// Gets the certificate object of the certificate.
 		/// </summary>
 		X509Certificate2 CertificateFile { get; }
 
 		/// <summary>
-		/// Defines the certificate info of the certificate.
+		/// Gets the full path of the .crt file of the certificate.
 		/// </summary>
-		CertificateInfo CertificateInfo { get; }
+		string CrtPath { get; }
 
 		/// <summary>
-		/// Gets the issuer .crt file path from a given folder.
+		/// Gets a value indicating whether the certificate is self-signed.
 		/// </summary>
-		/// <returns></returns>
-		string GetIssuerCrtFilePath(string folderPath);
+		bool IsSelfSigned { get; }
 
 		/// <summary>
-		/// Gets the issuer .p12 file path from a given folder.
+		/// Gets the distinguished name of the issuer of the certificate.
 		/// </summary>
-		/// <returns></returns>
-		string GetIssuerP12FilePath(string folderPath);
+		DistinguishedName Issuer { get; }
+
+		/// <summary>
+		/// Gets the full path of the .p12 file of the certificate.
+		/// </summary>
+		string P12Path { get; }
+
+		/// <summary>
+		/// Gets the distinguished name of the certificate.
+		/// </summary>
+		DistinguishedName Subject { get; }
+
+		/// <summary>
+		/// Get the issuer from a set of given folders. This method should only be used if the certificate is not <see cref="IsSelfSigned"/>.
+		/// For every folder provided the folder should contain for every certificate a folder that contains .p12 and .crt files.
+		/// </summary>
+		/// <param name="folderPaths">The folder paths to search the issuer.</param>
+		/// <returns>The certificate of the issuer.</returns>
+		ICertificate GetIssuersCert(params string[] folderPaths);
 	}
 }
